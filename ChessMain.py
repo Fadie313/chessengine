@@ -50,10 +50,14 @@ def main():
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0],playerClicks[1],gs.board)
-                    print(move.getChessNotation())
-                    gs.makeMove(move)
-                    #reset moves
-                    sqSelected = ()
+                    #print(move.getChessNotation())
+                    print('move',move.moveID)
+                    print('validMoves',validMoves[0].moveID)
+                    if move in validMoves:
+                        print('make move')
+                        gs.makeMove(move)
+                        moveMade = True
+                    sqSelected = () #reset moves
                     playerClicks=[]
             #keyboard handler
             elif e.type == p.KEYDOWN:
@@ -61,9 +65,9 @@ def main():
                     gs.undoMove()
                     moveMade = True
 
-        # if moveMade:
-        #     validMoves = gs.getValidMoves()
-        #     moveMade = False
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
         drawGameState(screen,gs)
         clock.tick(MAX_FPS)

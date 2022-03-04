@@ -90,14 +90,14 @@ class Move():
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
         self.moveID = self.startRow * 1000 + self.startCol *100 + self.endRow*10 + self.endCol
-        print(self.moveID)
+        #print(self.moveID)
     
     '''
     Overriding the equals method
     '''
-    def ___eq___(self,other):
+    def __eq__(self,other):
         if isinstance(other,Move): #good practice to check to make sure its a Move class
-            return self.moveLog == other.moveID
+            return self.moveID == other.moveID
         return False
 
     def getChessNotation(self):
