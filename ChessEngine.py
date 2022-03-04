@@ -9,11 +9,13 @@ class GameState():
             ["bP","bP","bP","bP","bP","bP","bP","bP"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
+            ["--","--","wR","--","--","bB","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["wP","wP","wP","wP","wP","wP","wP","wP"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
+        self.moveFunctions = {'P':self.getPawnMoves,'B':self.getBishopMoves,'K':self.getKingMoves,
+                              'N':self.getKnightMoves, 'Q':self.getQueenMoves,'R':self.getRookMoves}
         self.whiteToMove=True
         self.moveLog= []
     
@@ -47,29 +49,62 @@ class GameState():
     All moves without considering checks
     '''
     def getAllPossibleMoves(self):
-        moves = [Move((6,4),(4,4),self.board)]
-        for r in range(len(self.board)):
-            for c in range(len(self.board[r])):
+        moves = []
+        for r in range(len(self.board)): #number of rows
+            for c in range(len(self.board[r])): #number of cols in given row
                 turn = self.board[r][c][0]
-                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
-                    if piece == 'P':
-                        self.getPawnMoves(r,c,moves)
-                    elif piece == 'R':
-                        self.getRookMoves(r,c,moves)
-
+                    self.moveFunctions[piece](r,c,moves) #calls the appropriate move function based on piece type
         return moves
 
     '''
     Get all the pawn moves for the pawn located at row, col and add these moves to the list
     '''
-    def getPawnMoves(r,c,moves):
-        pass
+    def getPawnMoves(self,r,c,moves):
+        if self.whiteToMove: #whte pawn moves
+            if self.board[r-1][c] == "--": #check to see if one square above is empty
+                moves.append(Move((r,c),(r-1,c),self.board))
+                if r==6 and self.board[r-2][c] == "--": #Check to see if first move and if 2 squares above is empty.
+                    moves.append(Move((r,c),(r-2,c),self.board))
+            if c-1 >=0: #Looking to capture to left, but make sure you don't go off board
+                if self.board[r-1][c-1][0] == 'b': #enemy capture
+                    moves.append(Move((r,c),(r-1,c-1),self.board))
+            if c+1 <= 7: #Right capture
+                if self.board[r-1][c+1][0] == 'b': #enemy capture
+                    moves.append(Move((r,c),(r-1,c+1),self.board))
+
+
 
     '''
     Get all the rook moves for the pawn located at row, col and add these moves to the list
     '''
-    def getRookMoves(r,c,moves):
+    def getRookMoves(self,r,c,moves):
+        pass
+
+    '''
+    Get all the bishop moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getBishopMoves(self,r,c,moves):
+        pass
+
+
+    '''
+    Get all the king moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getKingMoves(self,r,c,moves):
+        pass
+
+    '''
+    Get all the knight moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getKnightMoves(self,r,c,moves):
+        pass
+
+    '''
+    Get all the queen moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getQueenMoves(self,r,c,moves):
         pass
 
 class Move():
