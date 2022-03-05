@@ -5,23 +5,23 @@ class GameState():
         #-the second character represents type of piece
         #  R=Rook,N=Knight,B=Bishop,Q=Queen,K=King,P=Pawn
         self.board = [
-            ["bR","bN","bB","bQ","bK","bB","bN","bR"],
-            ["--","--","bR","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","wB","bB","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["wR","--","--","--","--","--","--","--"],
-            ["wR","wN","wB","wQ","wK","wB","wN","wR"]
-
             # ["bR","bN","bB","bQ","bK","bB","bN","bR"],
-            # ["bP","bP","bP","bP","bP","bP","bP","bP"],
+            # ["--","--","bR","--","--","--","--","--"],
+            # ["--","--","--","--","--","--","--","--"],
+            # ["--","--","--","wB","bB","--","--","--"],
             # ["--","--","--","--","--","--","--","--"],
             # ["--","--","--","--","--","--","--","--"],
-            # ["--","--","--","--","--","--","--","--"],
-            # ["--","--","--","--","--","--","--","--"],
-            # ["wP","wP","wP","wP","wP","wP","wP","wP"],
+            # ["wR","--","--","--","--","--","--","--"],
             # ["wR","wN","wB","wQ","wK","wB","wN","wR"]
+
+            ["bR","bN","bB","bQ","bK","bB","bN","bR"],
+            ["bP","bP","bP","bP","bP","bP","bP","bP"],
+            ["--","--","--","--","--","--","--","--"],
+            ["--","--","--","--","--","--","--","--"],
+            ["--","--","--","--","--","--","--","--"],
+            ["--","--","--","--","--","--","--","--"],
+            ["wP","wP","wP","wP","wP","wP","wP","wP"],
+            ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
         self.moveFunctions = {'P':self.getPawnMoves,'B':self.getBishopMoves,'K':self.getKingMoves,
                               'N':self.getKnightMoves, 'Q':self.getQueenMoves,'R':self.getRookMoves}
@@ -149,7 +149,15 @@ class GameState():
     Get all the king moves for the pawn located at row, col and add these moves to the list
     '''
     def getKingMoves(self,r,c,moves):
-        pass
+        kingMoves = ((-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1))
+        allyColor='w' if self.whiteToMove else 'b'
+        for i in range(8):
+            endRow=r+kingMoves[i][0]
+            endCol=c+kingMoves[i][1]
+            if 0<=endRow<8 and 0<=endCol<8:
+                endPiece=self.board[endRow][endCol]
+                if endPiece[0] != allyColor: # not ally piece (empty or enemy piece)
+                    moves.append(Move((r,c),(endRow,endCol),self.board))
 
     '''
     Get all the queen moves for the pawn located at row, col and add these moves to the list
