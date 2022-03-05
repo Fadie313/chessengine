@@ -106,7 +106,7 @@ class GameState():
                 if 0 <= endRow < 8 and 0 <= endCol < 8:
                     endPiece = self.board[endRow][endCol]
                     if endPiece == "--": #empty space, valid and keep going
-                        moves.append(Move( (r,c),(endRow,endCol),self.board))
+                        moves.append(Move((r,c),(endRow,endCol),self.board))
                     elif endPiece[0] == enemyColor: #enemy piece, valid, and must stop here
                         moves.append(Move((r,c),(endRow,endCol),self.board))
                         break
@@ -129,17 +129,26 @@ class GameState():
         directions=((-1,-1),(-1,1),(1,-1),(1,1)) #4 diagonals
         self.getUniversalMoves(r,c,moves,directions)
 
+    '''
+    Get all the knight moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getKnightMoves(self,r,c,moves):
+        lmoves=((-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)) #L shaped move in all directions
+        allyColor = 'w' if self.whiteToMove else 'b'
+        for m in lmoves:
+            endRow=r+m[0]
+            endCol=c+m[1]
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece=self.board[endRow][endCol]
+                if endPiece[0] != allyColor: #valid move,if it isn't ally then its either enemy or empty
+                    moves.append(Move((r,c),(endRow,endCol),self.board))
+
+
 
     '''
     Get all the king moves for the pawn located at row, col and add these moves to the list
     '''
     def getKingMoves(self,r,c,moves):
-        pass
-
-    '''
-    Get all the knight moves for the pawn located at row, col and add these moves to the list
-    '''
-    def getKnightMoves(self,r,c,moves):
         pass
 
     '''
