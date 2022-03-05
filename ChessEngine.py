@@ -8,7 +8,7 @@ class GameState():
             ["bR","bN","bB","bQ","bK","bB","bN","bR"],
             ["--","--","bR","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
+            ["--","--","--","wB","bB","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["wR","--","--","--","--","--","--","--"],
@@ -97,8 +97,7 @@ class GameState():
     '''
     Get all the rook moves for the pawn located at row, col and add these moves to the list
     '''
-    def getRookMoves(self,r,c,moves):
-        directions=((-1,0),(0,-1),(1,0),(0,1)) #up,left,down,right
+    def getUniversalMoves(self,r,c,moves,directions):
         enemyColor = 'b' if self.whiteToMove else 'w'
         for d in directions:
             for i in range(1,8): #checking 7 moves in this particular direction
@@ -117,10 +116,18 @@ class GameState():
                     break
 
     '''
+    Get all the rook moves for the pawn located at row, col and add these moves to the list
+    '''
+    def getRookMoves(self,r,c,moves):
+        directions=((-1,0),(0,-1),(1,0),(0,1)) #up,left,down,right
+        self.getUniversalMoves(r,c,moves,directions)
+
+    '''
     Get all the bishop moves for the pawn located at row, col and add these moves to the list
     '''
     def getBishopMoves(self,r,c,moves):
-        pass
+        directions=((-1,-1),(-1,1),(1,-1),(1,1)) #4 diagonals
+        self.getUniversalMoves(r,c,moves,directions)
 
 
     '''
