@@ -32,6 +32,7 @@ def main():
     running = True
     sqSelected = () #(row,col)
     playerClicks = [] #keep track of player clicks, 2 tuples
+    p.display.set_caption('Chess Game')
 
     while running:
         for e in p.event.get():
@@ -60,6 +61,12 @@ def main():
                 if e.key==p.K_z:
                     gs.undoMove()
                     moveMade = True
+            playerturn='White' if gs.whiteToMove else 'Black'
+            if sqSelected:
+                pieceSelected = str(sqSelected[0])
+            else:
+                pieceSelected = 'None'
+            p.display.set_caption('Turn: '+playerturn+' Piece Selected: '+pieceSelected)
 
         if moveMade:
             validMoves = gs.getValidMoves()

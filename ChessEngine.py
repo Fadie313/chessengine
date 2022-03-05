@@ -155,7 +155,9 @@ class GameState():
     Get all the queen moves for the pawn located at row, col and add these moves to the list
     '''
     def getQueenMoves(self,r,c,moves):
-        pass
+        #queen can do same moves as rooks and bishops
+        self.getRookMoves(r,c,moves)
+        self.getBishopMoves(r,c,moves)
 
 class Move():
     # maps keys to values
