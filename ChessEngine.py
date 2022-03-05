@@ -6,13 +6,22 @@ class GameState():
         #  R=Rook,N=Knight,B=Bishop,Q=Queen,K=King,P=Pawn
         self.board = [
             ["bR","bN","bB","bQ","bK","bB","bN","bR"],
-            ["bP","bP","bP","bP","bP","bP","bP","bP"],
+            ["--","--","bR","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","wR","--","--","bB","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["wP","wP","wP","wP","wP","wP","wP","wP"],
+            ["--","--","--","--","--","--","--","--"],
+            ["wR","--","--","--","--","--","--","--"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]
+
+            # ["bR","bN","bB","bQ","bK","bB","bN","bR"],
+            # ["bP","bP","bP","bP","bP","bP","bP","bP"],
+            # ["--","--","--","--","--","--","--","--"],
+            # ["--","--","--","--","--","--","--","--"],
+            # ["--","--","--","--","--","--","--","--"],
+            # ["--","--","--","--","--","--","--","--"],
+            # ["wP","wP","wP","wP","wP","wP","wP","wP"],
+            # ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
         self.moveFunctions = {'P':self.getPawnMoves,'B':self.getBishopMoves,'K':self.getKingMoves,
                               'N':self.getKnightMoves, 'Q':self.getQueenMoves,'R':self.getRookMoves}
@@ -73,14 +82,39 @@ class GameState():
             if c+1 <= 7: #Right capture
                 if self.board[r-1][c+1][0] == 'b': #enemy capture
                     moves.append(Move((r,c),(r-1,c+1),self.board))
-
-
+        else: #black pawn moves
+            if self.board[r+1][c] == "--": #check to see if one square below is empty
+                moves.append(Move((r,c),(r+1,c),self.board))
+                if r==1 and self.board[r+2][c] == "--": #check to see if the square 2 below is empty
+                    moves.append(Move((r,c),(r+2,c),self.board))
+            if c-1 >= 0: #capture to left
+                if self.board[r+1][c-1][0] == 'w':
+                    moves.append(Move((r,c),(r+1,c-1),self.board))
+            if c+1 <= 7: #capture to right
+                if self.board[r+1][c+1][0] == 'w':
+                    moves.append(Move((r,c),(r+1,c+1),self.board))
 
     '''
     Get all the rook moves for the pawn located at row, col and add these moves to the list
     '''
     def getRookMoves(self,r,c,moves):
-        pass
+        directions=((-1,0),(0,-1),(1,0),(0,1)) #up,left,down,right
+        enemyColor = 'b' if self.whiteToMove else 'w'
+        for d in directions:
+            for i in range(1,8): #checking 7 moves in this particular direction
+                endRow = r+d[0]*i
+                endCol = c+d[1]*i
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--": #empty space, valid and keep going
+                        moves.append(Move( (r,c),(endRow,endCol),self.board))
+                    elif endPiece[0] == enemyColor: #enemy piece, valid, and must stop here
+                        moves.append(Move((r,c),(endRow,endCol),self.board))
+                        break
+                    else: #friendly piece, invalid, must stop here
+                        break
+                else: #off board, invalid, must stop here
+                    break
 
     '''
     Get all the bishop moves for the pawn located at row, col and add these moves to the list
@@ -125,7 +159,6 @@ class Move():
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
         self.moveID = self.startRow * 1000 + self.startCol *100 + self.endRow*10 + self.endCol
-        print(self.moveID)
     
     '''
     Overriding the equals method
@@ -140,6 +173,9 @@ class Move():
 
     def getRankFile(self,r,c):
         return self.colsToFile[c] + self.rowToRanks[r]
+
+    def printMove(self):
+        print('startRow:',self.startRow,'startCol:',self.startCol,'endRow:',self.endRow,'endCol:',self.endCol)
 
 
 
