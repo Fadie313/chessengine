@@ -44,17 +44,14 @@ def main():
                 col = location[0]//SQ_SIZE
                 row = location[1]//SQ_SIZE
                 if sqSelected == (row,col): #user clicked same square twice
-                    print('user clicked same square')
                     sqSelected=()#unselect it
                     playerClicks=[]
                 else:
                     sqSelected=(row,col)
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
-                    print('two clicks')
                     move = ChessEngine.Move(playerClicks[0],playerClicks[1],gs.board)
                     if move in validMoves:
-                        print('valid moves')
                         gs.makeMove(move)
                         moveMade = True
                         sqSelected = () #reset moves
@@ -63,7 +60,6 @@ def main():
                         ('not valid moves')
                         playerClicks=[sqSelected]
                 p.display.set_caption('Turn: '+playerturn+' Piece Selected: '+pieceSelected)
-                print('playerClicks:',playerClicks,'sqSelected:',sqSelected)
 
             #keyboard handler
             elif e.type == p.KEYDOWN:
