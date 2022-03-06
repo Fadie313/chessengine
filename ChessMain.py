@@ -44,20 +44,27 @@ def main():
                 col = location[0]//SQ_SIZE
                 row = location[1]//SQ_SIZE
                 if sqSelected == (row,col): #user clicked same square twice
-                    sqSelcted=()#unselect it
+                    print('user clicked same square')
+                    sqSelected=()#unselect it
                     playerClicks=[]
                 else:
                     sqSelected=(row,col)
                     playerClicks.append(sqSelected)
                 if len(playerClicks) == 2:
+                    print('two clicks')
                     move = ChessEngine.Move(playerClicks[0],playerClicks[1],gs.board)
                     if move in validMoves:
+                        print('valid moves')
                         gs.makeMove(move)
                         moveMade = True
                         sqSelected = () #reset moves
                         playerClicks=[]
                     else:
+                        ('not valid moves')
                         playerClicks=[sqSelected]
+                p.display.set_caption('Turn: '+playerturn+' Piece Selected: '+pieceSelected)
+                print('playerClicks:',playerClicks,'sqSelected:',sqSelected)
+
             #keyboard handler
             elif e.type == p.KEYDOWN:
                 if e.key==p.K_z:
@@ -68,13 +75,14 @@ def main():
                 pieceSelected = str(sqSelected[0])
             else:
                 pieceSelected = 'None'
-            p.display.set_caption('Turn: '+playerturn+' Piece Selected: '+pieceSelected)
 
         if moveMade:
             validMoves = gs.getValidMoves()
             moveMade = False
 
         drawGameState(screen,gs)
+        if sqSelected:
+            p.draw.rect(screen,'red',p.Rect(sqSelected[1]*SQ_SIZE,sqSelected[0]*SQ_SIZE,SQ_SIZE,SQ_SIZE),1)
         clock.tick(MAX_FPS)
         p.display.flip()
 
@@ -95,7 +103,6 @@ def drawBoard(screen):
         for c in range(DIMENSION):
             color=colors[((r+c)%2)]
             p.draw.rect(screen,color,p.Rect(c*SQ_SIZE,r*SQ_SIZE,SQ_SIZE,SQ_SIZE))
-
 '''
 Draw the pieces on the board using the current GameState.board
 '''
